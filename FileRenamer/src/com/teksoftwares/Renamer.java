@@ -57,10 +57,10 @@ public class Renamer {
 					String epNo = FilenameUtils.removeExtension(file.getFileName().toString()).replaceAll("[^?0-9]+","");
 					String extension = FilenameUtils.getExtension(file.getFileName().toString());
 
-					if (epNo.startsWith("720"))
-						epNo = epNo.substring(3, epNo.length());
-					if (epNo.startsWith("1080"))
-						epNo = epNo.substring(4, epNo.length());
+					if (epNo.contains("720"))
+						epNo = epNo.replace("720","");
+					if (epNo.contains("1080"))
+						epNo = epNo.replace("1080","");
 					if (epNo.length() > 3)
 						epNo = epNo.substring(0, epNo.length() / 2);
 
