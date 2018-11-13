@@ -54,8 +54,16 @@ public class Renamer {
 			try (Stream<Path> paths = Files.walk(Paths.get(path))) {
 				outputLog.append("Processing Folder " + path + "\n");
 				paths.filter(Files::isRegularFile).forEach(file -> {
-					String epNo = file.getFileName().toString().replaceAll("[^?0-9]+", "");
+					String epNo = FilenameUtils.removeExtension(file.getFileName().toString()).replaceAll("[^?0-9]+","");
 					String extension = FilenameUtils.getExtension(file.getFileName().toString());
+
+					if (epNo.startsWith("720"))
+						epNo = epNo.substring(3, epNo.length());
+					if (epNo.startsWith("1080"))
+						epNo = epNo.substring(4, epNo.length());
+					if (epNo.length() > 3)
+						epNo = epNo.substring(0, epNo.length() / 2);
+
 					outputLog.append(file.getFileName().toString() + " is Changed to " + filePrefix + epNo + "."
 							+ extension + "\n");
 					System.out.println(path + File.separator + filePrefix + epNo + "." + extension);
