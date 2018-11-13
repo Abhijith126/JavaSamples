@@ -22,6 +22,8 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+
 import java.awt.TextArea;
 
 public class Renamer {
@@ -54,13 +56,16 @@ public class Renamer {
 			try (Stream<Path> paths = Files.walk(Paths.get(path))) {
 				outputLog.append("Processing Folder " + path + "\n");
 				paths.filter(Files::isRegularFile).forEach(file -> {
-					String epNo = FilenameUtils.removeExtension(file.getFileName().toString()).replaceAll("[^?0-9]+","");
+
+					String[] removeStr = { "720p", "1080p", "x264", "x265", "480p", "360p", "10bit","s01" };
+					String fileName = FilenameUtils.removeExtension(file.getFileName().toString()).toLowerCase();
+
+					for (String tmp : removeStr) {
+						fileName = StringUtils.remove(fileName, tmp);
+					}
+					String epNo = fileName.replaceAll("[^?0-9]+", "");
 					String extension = FilenameUtils.getExtension(file.getFileName().toString());
 
-					if (epNo.contains("720"))
-						epNo = epNo.replace("720","");
-					if (epNo.contains("1080"))
-						epNo = epNo.replace("1080","");
 					if (epNo.length() > 3)
 						epNo = epNo.substring(0, epNo.length() / 2);
 
